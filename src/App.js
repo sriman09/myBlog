@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { Route, Switch } from 'react-router';
+import Article from './components/articles/Article';
+import {ApolloProvider, InMemoryCache, ApolloClient} from '@apollo/client'
+import ArticleDetails from './components/articles/ArticleDetails'
+// import Home from './components/Home';
+//import HomePage from './components/pages/HomePage';
+
+//layout
+import Navbar from './layout/Navbar';
+import Footer from './layout/Footer';
+import Categories from './components/routes/Categories';
+
+//apollo client
+const client = new ApolloClient({
+  uri: 'https://myblog-backendcms.herokuapp.com/graphql',
+  cache: new InMemoryCache()
+})
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApolloProvider client={client}>
+      <div>
+        <Navbar />
+        <Switch>
+          <Route exact path= '/' component={Article}/>
+          <Route path= '/posts/:slug' component={ArticleDetails}/>
+          <Route path='/:slug' component={Categories} />
+        </Switch>
+        <Footer />
+      </div>
+    </ApolloProvider>
+
   );
 }
 
